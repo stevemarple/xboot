@@ -1,5 +1,5 @@
 # XBoot Configuration for Calunium (atmega1284p @ 12MHz)
-# http://www.arduino.cc/
+# https://github.com/stevemarple/Calunium
 
 # use config.h
 USE_CONFIG_H = yes
