@@ -130,7 +130,7 @@ LED_INV               = 1
 # For ATMEGA, uart number is usually 0
 # UART_U2X will double clock rate for ATMEGA
 # Needed for high baud rates
-UART_BAUD_RATE        = 115200
+UART_BAUD_RATE        = 38400
 UART_NUMBER           = 0
 UART_U2X              = yes
 UART_RX_PUEN          = yes
