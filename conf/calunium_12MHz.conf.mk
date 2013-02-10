@@ -37,7 +37,7 @@ AVRDUDE_FUSES =
 
 AVRDUDE_FUSES += -U lfuse:w:0xFF:m
 AVRDUDE_FUSES += -U hfuse:w:0x92:m
-AVRDUDE_FUSES += -U efuse:w:0xFF:m
+AVRDUDE_FUSES += -U efuse:w:0xFD:m
 AVRDUDE_FUSES += -U lock:w:0xFF:m
 
 # Uncomment to override default fuse configurations
