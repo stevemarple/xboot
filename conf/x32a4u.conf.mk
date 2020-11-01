@@ -1,35 +1,21 @@
-# XBoot Configuration for Mongoose IMU (atmega328p)
-# http://ckdevices.com/
+# xmega32a4u configuration
 
 # use config.h
 USE_CONFIG_H = yes
 
 # MCU
-MCU = atmega328p
-
-# Select boot size
-# Note: if boot size is too small, XBoot may not fit.
-# Generally, it should be left on largest
-# See part datasheet for specific values
-# Largest
-BOOTSZ=0
-# Large
-#BOOTSZ=1
-# Medium
-#BOOTSZ=2
-# Small
-#BOOTSZ=3
+MCU = atxmega32a4u
 
 # Clock Speed
-# Use 16 MHz external crystal oscillator
-F_CPU = 16000000
+# Use 2 MHz internal RC oscillator
+F_CPU = 2000000
 
 # DFLL for better stability
 USE_DFLL = yes
 
 # Programmer settings
 OVERRIDE_AVRDUDE_PROGRAMMER = yes
-AVRDUDE_PROGRAMMER = jtag2isp
+AVRDUDE_PROGRAMMER = jtag2pdi
 AVRDUDE_PORT = usb
 
 # Fuse settings
@@ -37,17 +23,62 @@ AVRDUDE_FUSES =
 # If you wish to override the default fuse settings
 # determined in main Makefile, change them here
 # and then uncomment OVERRIDE_AVRDUDE_FUSES
+# See XMega A series datasheet (Atmel doc8077) section 4.16
 
-#AVRDUDE_FUSES += -U lfuse:w:0xFF:m
-#AVRDUDE_FUSES += -U hfuse:w:0xFF:m
-#AVRDUDE_FUSES += -U efuse:w:0xFF:m
+# Fuse byte 0: JTAG User ID
+# If a custom JTAG User ID is required, uncomment
+# and set it here
+#AVRDUDE_FUSES += -U fuse0:w:0x00:m
+
+# Fuse byte 1: Watchdog
+# Set WDPER and WDWPER
+# See datasheet sections 4.16.2, 11.7.1, and 11.7.2
+# for more information
+#AVRDUDE_FUSES += -U fuse1:w:0x00:m
+
+# Fuse byte 2: Reset configuration
+# Spike detector, reset vector location, and BOD
+# in power down configuration
+# See datasheet section 4.16.3 for more information
+#AVRDUDE_FUSES += -U fuse2:w:0xBF:m
+
+# There is no fuse byte 3.....
+
+# Fuse byte 4: Start-up configuration
+# See datasheet section 4.16.4
+# Configures external reset disable, start-up time,
+# watchdog timer lock, and jtag enable
+#AVRDUDE_FUSES += -U fuse4:w:0xFE:m
+
+# Fuse byte 5
+# See datasheet section 4.16.5
+# Configures BOD operation in active mode,
+# EEPROM preserved through chip erase, and
+# BOD detection leven
+#AVRDUDE_FUSES += -U fuse5:w:0xFF:m
+
+# Lock byte
+# See datasheet section 4.16.6
+# Lock bits for boot loader, application,
+# and application table sections via internal
+# SPM commands and external programming interface
 #AVRDUDE_FUSES += -U lock:w:0xFF:m
+
+# Write user sig row (256 bytes max)
+# Uncomment to initialize user sig row with custom data
+##AVRDUDE_USERSIG = -U usersig:w:0x01,0x02,0x03:m
+##AVRDUDE_USERSIG = -U usersig:w:filename
+#AVRDUDE_USERSIG = -U usersig:w:...:m
 
 # Uncomment to override default fuse configurations
 # from main Makefile
 #OVERRIDE_AVRDUDE_FUSES = yes
 
 # XBoot settings
+
+# AVR1008 fixes
+# Really only applicable to XMEGA 256a3 rev A and B devices
+USE_AVR1008_EEPROM = no
 
 # Entry
 USE_ENTER_DELAY = yes
@@ -101,7 +132,7 @@ ENTER_PIN_PUEN        = 1
 
 # ENTER_DELAY
 ENTER_BLINK_COUNT     = 3
-ENTER_BLINK_WAIT      = 300000
+ENTER_BLINK_WAIT      = 30000
 
 # ENTER_UART
 #ENTER_UART_NEED_SYNC = yes
@@ -124,18 +155,15 @@ WATCHDOG_TIMEOUT      = WDT_PER_1KCLK_gc
 #WATCHDOG_TIMEOUT      = WDT_PER_8KCLK_gc
 
 # LED
-LED_PORT_NAME         = D
-LED_PIN               = 4
+LED_PORT_NAME         = A
+LED_PIN               = 0
 LED_INV               = 1
 
 # UART
-# Select BAUD rate and UART number
-# For ATMEGA, uart number is usually 0
-# UART_U2X will double clock rate for ATMEGA
-# Needed for high baud rates
+# Select BAUD rate, port name, and UART number
 UART_BAUD_RATE        = 115200
+UART_PORT_NAME        = C
 UART_NUMBER           = 0
-UART_U2X              = yes
 UART_RX_PUEN          = yes
 UART_REMAP            = no
 
@@ -159,6 +187,20 @@ I2C_DEVICE_PORT       = C
 I2C_MATCH_ANY         = 1
 I2C_ADDRESS           = 0x10
 I2C_GC_ENABLE         = 1
+
+# I2C Address Autonegotiation
+# Note: only works on XMega chips for the time being
+# There is no easy way to get this to work on regular
+# ATMega chips as they have no unique part ID number
+I2C_AUTONEG_DIS_PROMISC       = 1
+I2C_AUTONEG_DIS_GC            = 0
+I2C_AUTONEG_PORT_NAME         = A
+I2C_AUTONEG_PIN               = 2
+
+# Attach LED
+ATTACH_LED_PORT_NAME          = A
+ATTACH_LED_PIN                = 1
+ATTACH_LED_INV                = 1
 
 
 

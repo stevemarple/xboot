@@ -24,6 +24,9 @@ BOOTSZ=0
 # Use 16 MHz external crystal oscillator
 F_CPU = 16000000
 
+# DFLL for better stability
+USE_DFLL = yes
+
 # Programmer settings
 OVERRIDE_AVRDUDE_PROGRAMMER = yes
 AVRDUDE_PROGRAMMER = jtag2isp
@@ -52,6 +55,7 @@ USE_ENTER_PIN = no
 USE_ENTER_UART = yes
 USE_ENTER_I2C = no
 USE_ENTER_FIFO = no
+USE_ENTER_EEPROM = no
 
 # Exit
 LOCK_SPM_ON_EXIT = no
@@ -106,6 +110,9 @@ ENTER_BLINK_WAIT      = 300000
 # ENTER_FIFO
 #ENTER_FIFO_NEED_SYNC = yes
 
+# ENTER_EEPROM
+ENTER_EEPROM_ADDR = 0x3f8;
+
 # USE_WATCHDOG
 # Select only one
 #WATCHDOG_TIMEOUT      = WDT_PER_8CLK_gc
@@ -134,6 +141,7 @@ UART_BAUD_RATE        = 115200
 UART_NUMBER           = 0
 UART_U2X              = yes
 UART_RX_PUEN          = yes
+UART_REMAP            = no
 
 # UART RS485 Enable Output
 UART_EN_PORT_NAME     = C

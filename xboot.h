@@ -58,8 +58,6 @@
 
 // clock config
 #ifdef __AVR_XMEGA__
-// DFLL for better stability
-#define USE_DFLL
 // use 32MHz osc if makefile calls for it
 #if (F_CPU == 32000000L)
 // defaults to 2MHz RC oscillator
@@ -240,8 +238,13 @@
 #ifdef __AVR_XMEGA__
 
 #if (UART_NUMBER == 0)
+#ifdef UART_REMAP
+#define UART_RX_PIN             6
+#define UART_TX_PIN             7
+#else
 #define UART_RX_PIN             2
 #define UART_TX_PIN             3
+#endif
 #else
 #define UART_RX_PIN             6
 #define UART_TX_PIN             7
@@ -287,8 +290,8 @@
 #define UART_BSCALE_VALUE       0
 #define UART_CLK2X              0
 #elif (F_CPU == 32000000L) && (UART_BAUD_RATE == 115200)
-#define UART_BSEL_VALUE         16
-#define UART_BSCALE_VALUE       0
+#define UART_BSEL_VALUE         1047
+#define UART_BSCALE_VALUE       -6
 #define UART_CLK2X              0
 // None of the above, so calculate something
 #else
